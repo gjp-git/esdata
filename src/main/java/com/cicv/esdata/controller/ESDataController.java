@@ -1,5 +1,6 @@
 package com.cicv.esdata.controller;
 
+import com.cicv.esdata.util.MyError;
 import com.cicv.esdata.util.StringUtils;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.search.SearchRequest;
@@ -15,6 +16,8 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -23,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/cicv/scene")
+@RequestMapping(value = "/cicv/scenarioLibrary")
 public class ESDataController {
     @Value("${com.cicv.fdfs.service.ip}")
     private String hostname;
@@ -38,8 +41,8 @@ public class ESDataController {
         return "welcome";
     }
 
-    @PostMapping("/getScenceByCity")
-    public String search(@RequestBody Map<String, String> args) {
+    @PostMapping("/scenarios")
+    public ResponseEntity<?> search(@RequestBody Map<String, String> args) {
         //TODO： 改为连接池
         RestHighLevelClient client = new RestHighLevelClient(
                 RestClient.builder(
@@ -49,12 +52,14 @@ public class ESDataController {
         if (args.containsKey("city")) {
             city = args.get("city");
         } else {
-            return "No param named \"city\"!";
+            MyError error = new MyError(400 , "No param named \"city\"!");
+            return new ResponseEntity<MyError>(error, HttpStatus.BAD_REQUEST);
         }
         if (args.containsKey("timestamp")) {
             timestamp = args.get("timestamp");
             if (timestamp.length() != 10 || !StringUtils.isNumeric(timestamp)) {
-                return "Incorrect value of \"timestamp\" !";
+                MyError error = new MyError(400 , "Incorrect value of \"timestamp\" !");
+                return new ResponseEntity<MyError>(error, HttpStatus.BAD_REQUEST);
             }
             timestamp = timestamp + "0";//10hz
         }
@@ -103,8 +108,9 @@ public class ESDataController {
             client.close();
         } catch (IOException | NumberFormatException | NullPointerException e) {
             e.printStackTrace();
-            result = "{\"state\":\"failure\",\"info\":\"Something went wrong.\"}";
+            MyError error = new MyError(500 , "{\"state\":\"failure\",\"info\":\"Something went wrong.\"}");
+            return new ResponseEntity<MyError>(error, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return result;
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
