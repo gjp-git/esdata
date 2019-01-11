@@ -9,7 +9,9 @@ import time
 def matchLine(target,lines,index):
 	if index >= len(lines):
 		return -1
-	timeprefix = lines[index].replace('.','')[:11]
+	timeprefix = lines[index].replace('.','').replace('\"','')[:11]
+	
+	
 	
 	if target < timeprefix:
 		return -1
@@ -18,7 +20,7 @@ def matchLine(target,lines,index):
 		index += 1
 		if index >= len(lines):
 			return -1
-		timeprefix = lines[index].replace('.','')[:11]
+		timeprefix = lines[index].replace('.','').replace('\"','')[:11]
 		if target < timeprefix:
 			return -1
 	
@@ -29,8 +31,8 @@ def matchLine(target,lines,index):
 
 if __name__ == "__main__":
 	#id = 0
-	dir = "D:\\cicv\\BBB new data"
-	#dir = "D:\\cicv\\AAAdata"
+	#dir = "D:\\cicv\\BBB new data"
+	dir = "D:\\cicv\\AAAdata"
 	fileList = os.listdir(dir)
 	#print fileList
 	
@@ -46,7 +48,9 @@ if __name__ == "__main__":
 		thisLine = {}
 		thisLine['city'] = city
 		
-		fieldList = ['can','gps','imu','road','obj','webp','pcl1_image','webp_marked']
+		#fieldList = ['can','gps','imu','road','obj','webp','pcl1_image','webp_marked']
+		fieldList = ['can','gps','imu','webp','pcl1_image','webp_marked']
+		"""
 		fieldPaths = [
 			"\\can\\can.csv",
 			"\\imu\\gpsfix.csv",
@@ -56,6 +60,15 @@ if __name__ == "__main__":
 			"\\webpList.csv",
 			"\\pcl1_image.csv",
 			"\\imageMarkedWebpList.csv"
+		]
+		"""
+		fieldPaths = [
+			"\\can\\can.csv",
+			"\\imu\\gpsfix.csv",
+			"\\imu\\imudata.csv",
+			"\\image_webp.csv",
+			"\\pcl1_imageList.csv",
+			"\\image_marked_webp.csv"
 		]
 
 		
@@ -69,8 +82,8 @@ if __name__ == "__main__":
 		canFile.readline()
 		gpsFile.readline()
 		imuFile.readline()
-		roadFile.readline()
-		objFile.readline()
+		#roadFile.readline()
+		#objFile.readline()
 		
 		#read files
 		for x in fieldList:
@@ -129,45 +142,7 @@ if __name__ == "__main__":
 				imuData['linear_acceleration_z'] = imuFields[31]
 				imuLineIndex += 1
 				
-			tmp = matchLine(timeprefix,roadLines,roadLineIndex)
-			if tmp == -1:
-				continue
-			else:
-				roadData = {}
-				roadLineIndex = tmp
-				roadFields = roadLines[roadLineIndex][:-1].split(',')
-				roadData['leftType'] = roadFields[1]
-				roadData['righType'] = roadFields[2]
-				roadData['curvature'] = roadFields[5]
-				roadData['heading'] = roadFields[6]
-				roadData['leftOffset'] = roadFields[7]
-				roadData['rightOffset'] = roadFields[8]
-				roadLineIndex += 1
-				
-			tmp = matchLine(timeprefix,objLines,objLineIndex)
-			if tmp == -1:
-				continue
-			else:
-				objData = []
-				objLineIndex = tmp
-				objFields = objLines[objLineIndex][:-1].split(',')
-				num = len(objFields)//9
-
-				if objFields[-1]=='1' and len(objFields)%9==2:
-					for i in range(num):
-						obj = {}
-						obj['id'] = objFields[i*9+1]
-						obj['x'] = objFields[i*9+2]
-						obj['y'] = objFields[i*9+3]
-						obj['relspeed'] = objFields[i*9+4]
-						obj['width'] = objFields[i*9+5]
-						obj['length'] = objFields[i*9+6]
-						obj['height'] = objFields[i*9+7]
-						obj['classification'] = objFields[i*9+9]
-						objData.append(obj)
-				else:
-					print timeprefix+" obj failed"
-				objLineIndex += 1
+			
 				
 			tmp = matchLine(timeprefix,webpLines,webpLineIndex)
 			if tmp == -1:
