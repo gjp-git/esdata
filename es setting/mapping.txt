@@ -1,0 +1,156 @@
+PUT scene_data 
+{
+	"mappings": {
+		"scene": {
+    	"properties": {
+    		"time": {
+    			"type": "date",
+    			"format": "yyyy/MM/dd HH:mm:ss||yyyy/MM/dd"
+    		},
+    		"timestamp": {
+    			"type": "long"
+    		},
+    		"city": {
+    			"type": "keyword"
+    		},
+    		"image": {
+    			"type": "text"
+    		},
+    		"webp": {
+    			"type": "text"
+    		},
+    		"image_marked": {
+    			"type": "text"
+    		},
+    		"webp_marked": {
+    			"type": "text"
+    		},
+    		"pcl1_image": {
+    			"type": "text"
+    		},
+    		"pcl1": {
+    			"type": "text"
+    		},
+    		"can": {
+    			"properties": {
+    				"siSteeringVelocity": {
+    					"type": "double"
+    				},
+    				"siBrakePressure": {
+    					"type": "double"
+    				},
+    				"siSteeringAngle": {
+    					"type": "double"
+    				},
+    				"siAccelerationPedal": {
+    					"type": "double"
+    				},
+    				"siVehicleSpeed": {
+    					"type": "double"
+    				}
+    			}
+    		},
+    		"gps": {
+    			"properties": {
+    				"location": {
+    					"type": "geo_point"
+    				},
+    				"latitude": {
+    					"type": "double"
+    				}
+    				,
+    				"longitude": {
+    					"type": "double"
+    				}
+    				,
+    				"altitude": {
+    					"type": "double"
+    				}
+    			}
+    		},
+    		"imu": {
+    			"properties": {
+    				"orientation_x": {
+    					"type": "double"
+    				},
+    				"orientation_y": {
+    					"type": "double"
+    				},
+    				"orientation_z": {
+    					"type": "double"
+    				},
+    				"linear_acceleration_x": {
+    					"type": "double"
+    				},
+    				"linear_acceleration_y": {
+    					"type": "double"
+    				},
+    				"linear_acceleration_z": {
+    					"type": "double"
+    				},
+    				"angular_velocity_x": {
+    					"type": "double"
+    				},
+    				"angular_velocity_y": {
+    					"type": "double"
+    				},
+    				"angular_velocity_z": {
+    					"type": "double"
+    				}
+    			}
+    		},
+    		"obj": {
+    			"type": "nested",
+    			"properties": {
+    				"classification": {
+    					"type": "keyword"
+    				},
+    				"relspeed": {
+    					"type": "double"
+    				},
+    				"height": {
+    					"type": "double"
+    				},
+    				"width": {
+    					"type": "double"
+    				},
+    				"length": {
+    					"type": "double"
+    				},
+    				"y": {
+    					"type": "double"
+    				},
+    				"x": {
+    					"type": "double"
+    				},
+    				"id": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"road": {
+    			"properties": {
+    				"heading": {
+    					"type": "double"
+    				},
+    				"curvature": {
+    					"type": "double"
+    				},
+    				"leftType": {
+    					"type": "keyword"
+    				},
+    				"leftOffset": {
+    					"type": "double"
+    				},
+    				"rightType": {
+    					"type": "keyword"
+    				},
+    				"rightOffset": {
+    					"type": "double"
+    				}
+    			}
+    		}
+    	}
+		}
+	}
+}
