@@ -2,7 +2,7 @@
 import os  
 import json
 import time
-
+import sys
 
 
 
@@ -31,8 +31,12 @@ def matchLine(target,lines,index):
 
 if __name__ == "__main__":
 	#id = 0
+	if sys.argv[1]!=null and os.path.isdir(sys.argv[1]):
+		dir = sys.argv[1]
+	else:
+		return
 	#dir = "D:\\cicv\\BBB new data"
-	dir = "D:\\cicv\\AAAdata"
+	#dir = "D:\\cicv\\AAAdata"
 	fileList = os.listdir(dir)
 	#print fileList
 	

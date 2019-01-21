@@ -2,7 +2,7 @@
 import os  
 import json
 import time
-
+import sys
 
 
 
@@ -28,8 +28,13 @@ def matchLine(target,lines,index):
 		return -1
 
 if __name__ == "__main__":
+	if len(sys.argv)>1 and sys.argv[1]!=null and os.path.isdir(sys.argv[1]):
+		dir = sys.argv[1]
+	else:
+		print u"缺少参数：目标文件夹"
+		exit(0)
 	#id = 0
-	dir = "D:\\cicv\\BBB new data"
+	#dir = "D:\\cicv\\BBB new data"
 	#dir = "D:\\cicv\\AAAdata"
 	fileList = os.listdir(dir)
 	#print fileList
